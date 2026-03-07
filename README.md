@@ -9,24 +9,25 @@ within each topic you will find notebooks
 ---
 
 ## Folder structure overview
-
-- **Anomaly_Detection** – examples of detecting unusual observations in time‑series data.
-- **Classification** – binary and multiclass classification tasks; model building and evaluation.
-- **Clusterization** – unsupervised grouping of data points with K‑means and other algorithms.
-- **Data_Exploration** – exploratory data analysis (EDA), statistical summaries and visualisation.
-- **Regression** – predicting continuous targets using linear models, trees, and more.
-- **Recommender_System** – building recommenders with similarity measures and co‑occurrence.
-- **Statistical_Inference** – inferential statistics and hypothesis testing (work in progress).
-- **Monte_Carlo (not done)** – Monte Carlo simulation techniques (unfinished).
+- **classic_data_science** - classic machine learning algorithms
+  - **Anomaly_Detection** – examples of detecting unusual observations in time‑series data.
+  - **Classification** – binary and multiclass classification tasks; model building and evaluation.
+  - **Clusterization** – unsupervised grouping of data points with K‑means and other algorithms.
+  - **Data_Exploration** – exploratory data analysis (EDA), statistical summaries and visualisation.
+  - **Regression** – predicting continuous targets using linear models, trees, and more.
+  - **Recommender_System** – building recommenders with similarity measures and co‑occurrence.
+  - **Statistical_Inference** – inferential statistics and hypothesis testing (work in progress).
+  - **Monte_Carlo (not done)** – Monte Carlo simulation techniques (unfinished).
 - **deep_learning** – deep learning experiments using PyTorch and Keras.
+- **nlp** - natural language processing, there is self written gpt4 tokenizer, ...
 
 Each topic often has subfolders `Basic`, `Advanced`, and `Other` depending on the level of material.
 
 ---
+## `classic_data_science`
+### Data Exploration
 
-## Data Exploration
-
-### Primer
+#### Primer
 **`classic_data_science/Data_Exploration/Basic/explo_primer.ipynb`**  
 A walk‑through of simple exploratory techniques applied to the `kc_house_data.csv` dataset,
 which contains real estate transactions in King County, WA.  The notebook loads the CSV, 
@@ -34,7 +35,7 @@ computes descriptive statistics, inspects missing values, and visualises distrib
 and pairwise relationships using histograms, scatter plots and correlation heatmaps.  The
 purpose is to familiarise the reader with pandas, seaborn/plotly, and the iterative EDA process.
 
-### Advanced
+#### Advanced
 **`classic_data_science/Data_Exploration/Advanced/explo_advanced.ipynb`**  
 This notebook performs a deeper investigation of two NASA datasets `impacts.csv` and
 `orbits.csv` that record potentially hazardous near‑Earth objects.  Methods include data
@@ -43,9 +44,9 @@ techniques such as feature engineering (e.g. calculating orbital parameters), ti
 analysis, and interactive visualisations.
 
 
-## Regression
+### Regression
 
-### Primer
+#### Primer
 **`classic_data_science/Regression/Basic/regression_primer.ipynb`**  
 Using the `kc_house_data.csv` dataset again, this notebook introduces simple linear
 regression to predict house prices from features like square footage and number of
@@ -53,7 +54,7 @@ en‑suites.  It covers train/test splitting, model fitting with scikit‑learn,
 coefficients interpretation, residual analysis, and basic performance metrics (MSE, R²).
 
 
-### Advanced
+#### Advanced
 **`classic_data_science/Regression/Advanced/regression_advanced.ipynb`**  
 An expanded regression study on the wine quality datasets (`winequality-red.csv` and
 `winequality-white.csv`).  After preprocessing (handling categorical data, scaling,
@@ -63,16 +64,16 @@ are demonstrated.  The notebook illustrates how to compare model performance acr
 pipelines and interpret results for continuous target prediction.
 
 
-### Other
+#### Other
 **`classic_data_science/Regression/Other/model_building.ipynb`**  
 A separate regression example using `Xtrain.csv`/`ytrain.csv`, from a Kaggle-style
 competition. It focuses on feature selection, model stacking, and submission file
 creation. The dataset isn't included due to size but the notebook describes the workflow.
 
 
-## Classification
+### Classification
 
-### Primer
+#### Primer
 **`classic_data_science/Classification/Basic/classification_primer.ipynb`**  
 An introductory classification notebook that could use a standard dataset (e.g.
 Iris or similar).  It demonstrates loading data, visualising class separability, training
@@ -80,7 +81,7 @@ logistic regression and k‑nearest neighbours, and evaluating with confusion ma
 precision/recall, and ROC curves.
 
 
-### Advanced
+#### Advanced
 **`classic_data_science/Classification/Advanced/classification_advanced.ipynb`**  
 A more sophisticated classification project using the wine quality CSV files.  The goal
 is to predict quality scores converted to binary or multi‑class labels.  Techniques
@@ -89,16 +90,16 @@ forests, and ensemble methods.  Model evaluation uses cross‑validation and det
 classification reports.  The notebook also explores the impact of hyperparameters
 and visualises decision boundaries.
 
-### Other
+#### Other
 **`classic_data_science/Classification/Other/model_build.ipynb`**  
 Additional classification examples from outside the core course. The notebook walks
 through training models on an external dataset, likely focusing on rapid prototyping
 and baseline comparisons. Data may not be included in the repository.
 
 
-## Clusterization
+### Clusterization
 
-### Primer
+#### Primer
 **`classic_data_science/Clusterization/Basic/clusterization_primer.ipynb`**  
 Explores unsupervised learning with K‑means clustering on a simple dataset. Covers
 standardisation, choosing `k` with the elbow method and silhouette score, and
@@ -106,21 +107,21 @@ visualising clusters.  The notebook highlights how to interpret cluster centroid
 and assign labels to new observations.
 
 
-### Advanced
+#### Advanced
 **`classic_data_science/Clusterization/Advanced/clusterization_advanced.ipynb`**  
 Demonstrates more advanced clustering algorithms (e.g. hierarchical clustering,
 DBSCAN) and techniques such as dimensionality reduction (PCA, t‑SNE) to visualise
 high‑dimensional data.  It may also include a case study on a real-world dataset
 with preprocessing steps like outlier removal and feature selection.
 
-### Other
+#### Other
 **`classic_data_science/Clusterization/Other/model_building.ipynb`**  
 Supplementary clustering work from an external project. Contains experiments
 with alternative algorithms and evaluation metrics.  he notebook may be more
 experimental in nature and serves as additional practice.
 
 
-## Anomaly Detection
+### Anomaly Detection
 
 **`classic_data_science/Anomaly_Detection/model_testing.ipynb`**  
 A notebook dedicated to identifying anomalies in a time‑series dataset (`Xtrain.csv`
@@ -130,7 +131,7 @@ Isolation Forest, or autoencoder‑based approaches.  The notebook compares dete
 performance and visualises anomalous points.
 
 
-## Recommender System
+### Recommender System
 
 Two notebooks illustrate collaborative filtering and content‑based recommendations
 using Steam games and user behaviour data.
@@ -148,7 +149,7 @@ The notebooks explain the underlying mathematics (cosine similarity, Pearson
 correlation) and discuss cold‑start issues.
 
 
-## Statistical Inference (work in progress)
+### Statistical Inference (work in progress)
 
 **`classic_data_science/Statistical_Inference/statistical_inference.ipynb`**  
 Contains exercises on hypothesis testing, confidence intervals, and parameter
@@ -157,7 +158,7 @@ folder is marked "not done"; the notebook may be incomplete but outlines classic
 statistical procedures relevant to data science.
 
 
-## Monte Carlo (work in progress)
+### Monte Carlo (work in progress)
 
 **`classic_data_science/Monte_Carlo/montecarlo.ipynb`**  
 An unfinished notebook intending to demonstrate Monte Carlo simulation techniques
@@ -165,7 +166,7 @@ for numerical integration, option pricing, or risk assessment.  It likely contai
 initial code scaffolding and explanatory comments but lacks full experiments.
 
 
-## Deep Learning
+## `deep_learning`
 
 The `deep_learning` directory houses various experiments carried out with **PyTorch and Keras**. The notebooks cover feed‑forward neural networks (FFNN), convolutional networks, recurrent architectures, and hyperparameter tuning with Ray Tune. Specific files include:
 
@@ -201,6 +202,16 @@ The notebook contains:
 - **ResNet34** scored 78% accuracy
 - **ResNet56** scored 71% accuracy
 
+
+## `nlp`
+
+### `gpt4-tokenizer`
+It is implemented from scratch and trained gpt4 Tokenizer. Based on Andrej Karpathy exercise and lectures...
+
+The folder contains:
+- dataset it was trained on `taylorswift.txt`
+- notebook with example workflow
+- and `src` packet with all the source code
 
 ---
 
