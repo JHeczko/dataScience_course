@@ -8,4 +8,4 @@ class BaseTokenizer(ABC):
     def encode(self, text): pass
 
     @abstractmethod
-    def decode(self, ids): pass
+    def decode(self, tokens): pass

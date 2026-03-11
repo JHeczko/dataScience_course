@@ -33,6 +33,8 @@ class BasicTokenizer(BaseTokenizer):
 
     @overrides(check_signature=False)
     def train(self, text:str, vocab_size:int, verbose=False):
+        assert vocab_size >= 256
+
         tokens_utf8 = list(text.encode('utf-8'))
         tokens_utf8 = list(map(int, tokens_utf8))
 
@@ -42,19 +44,22 @@ class BasicTokenizer(BaseTokenizer):
 
         replace_token = 257
 
+        self.decode_dict = {token_id: bytes([token_id]) for token_id in range(256)}
+
         for i in range(num_merges):
             counter = self.__count_pairs(merged_tokens)
             most_common_pair = max(counter.keys(), key=counter.get)
             merged_tokens = self.__merge(merged_tokens, most_common_pair, replace_token)
 
             self.encode_dict[most_common_pair] = replace_token
-            self.decode_dict[replace_token] = most_common_pair
+            self.decode_dict[replace_token] = self.decode_dict[most_common_pair[0]] + self.decode_dict[most_common_pair[1]]
 
-            print(f"Merging {most_common_pair} to {replace_token}")
+            if verbose:
+                print(f"{i}/{num_merges} | Merging {most_common_pair} to {replace_token}")
 
             replace_token+=1
 
-
+        return merged_tokens
 
 
     @overrides
@@ -62,5 +67,7 @@ class BasicTokenizer(BaseTokenizer):
         print(text)
 
     @overrides
-    def decode(self, ids):
-        print(ids)
+    def decode(self, tokens):
+        text_bytes = b"".join(self.decode_dict[token_id] for token_id in tokens)
+        text_out = text_bytes.decode('utf-8')
+        return text_out
