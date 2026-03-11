@@ -55,11 +55,9 @@ class BasicTokenizer(BaseTokenizer):
             self.decode_dict[replace_token] = self.decode_dict[most_common_pair[0]] + self.decode_dict[most_common_pair[1]]
 
             if verbose:
-                print(f"{i}/{num_merges} | Merging {most_common_pair} to {replace_token}")
+                print(f"{i+1}/{num_merges} | Merging {most_common_pair} to {replace_token}")
 
             replace_token+=1
-
-        return merged_tokens
 
 
     @overrides
