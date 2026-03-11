@@ -64,10 +64,22 @@ class BasicTokenizer(BaseTokenizer):
 
     @overrides
     def encode(self, text):
-        print(text)
+        text_tokens = list(text.encode('utf-8'))
+
+        while len(text_tokens) >= 2:
+            counter = self.__count_pairs(text_tokens)
+            pair = min(counter, key=lambda p: self.encode_dict.get(p, float("inf")))
+
+            if pair not in self.encode_dict:
+                break
+
+            text_tokens = self.__merge(text_tokens, pair, self.encode_dict[pair])
+
+        return text_tokens
+
 
     @overrides
     def decode(self, tokens):
         text_bytes = b"".join(self.decode_dict[token_id] for token_id in tokens)
-        text_out = text_bytes.decode('utf-8')
+        text_out = text_bytes.decode('utf-8', errors='replace')
         return text_out
