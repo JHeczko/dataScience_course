@@ -1,2 +1,2 @@
-from .base import BasicTokenizer
+from .basic import BasicTokenizer
 from .regex import RegexTokenizer
