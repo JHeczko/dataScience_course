@@ -3,7 +3,11 @@ from overrides import overrides
 from .base import BaseTokenizer
 
 class BasicTokenizer(BaseTokenizer):
+    def __init__(self):
+        super().__init__()
 
+        self.encode_dict = {}
+        self.decode_dict = {}
 
     def __count_pairs(self, encoded_text):
         counts = {}
@@ -32,8 +36,23 @@ class BasicTokenizer(BaseTokenizer):
         tokens_utf8 = list(text.encode('utf-8'))
         tokens_utf8 = list(map(int, tokens_utf8))
 
-        counter = self.__count_pairs(tokens_utf8)
-        most_common_pair = max(counter.keys(), key=counter.get)
+        merged_tokens = tokens_utf8
+
+        num_merges = vocab_size - 256
+
+        replace_token = 257
+
+        for i in range(num_merges):
+            counter = self.__count_pairs(merged_tokens)
+            most_common_pair = max(counter.keys(), key=counter.get)
+            merged_tokens = self.__merge(merged_tokens, most_common_pair, replace_token)
+
+            self.encode_dict[most_common_pair] = replace_token
+            self.decode_dict[replace_token] = most_common_pair
+
+            print(f"Merging {most_common_pair} to {replace_token}")
+
+            replace_token+=1
 
 
 
