@@ -1,8 +1,8 @@
 import regex as re
 from overrides import overrides
-from .base import BaseTokenizer
+from .base import Tokenizer
 
-class RegexTokenizer(BaseTokenizer):
+class RegexTokenizer(Tokenizer):
     def __init__(self):
         super().__init__()
 

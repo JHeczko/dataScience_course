@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class BaseTokenizer(ABC):
+class Tokenizer(ABC):
     @abstractmethod
     def train(self, text:str, vocab_size:int, verbose=False): pass
 

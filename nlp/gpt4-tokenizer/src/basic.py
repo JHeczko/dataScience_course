@@ -1,8 +1,8 @@
 from overrides import overrides
 
-from .base import BaseTokenizer
+from .base import Tokenizer
 
-class BasicTokenizer(BaseTokenizer):
+class BasicTokenizer(Tokenizer):
     def __init__(self):
         super().__init__()
 
