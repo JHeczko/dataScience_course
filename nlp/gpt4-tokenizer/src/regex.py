@@ -8,10 +8,23 @@ class RegexTokenizer(BaseTokenizer):
 
         self.regex = re.compile(r"""'(?i:[sdmt]|ll|ve|re)|[^\r\n\p{L}\p{N}]?+\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]++[\r\n]*|\s*[\r\n]|\s+(?!\S)|\s+""")
 
+        # (int, int) -> int
+        # basicly how to merge a specific pair into token
         self.encode_dict = {}
+
+        # int -> bytes
+        # token to the corresponding bytes
         self.decode_dict = {}
 
-    def __count_pairs(self, encoded_text, stats: dict[tuple[int,int]]):
+        # str -> int
+        # special_token -> token
+        self.special_tokens_encode = {}
+
+        # int -> str
+        # token -> special_token
+        self.special_tokens_decode = {}
+
+    def __count_pairs(self, encoded_text, stats = None):
         counts = {}
         for pair in zip(encoded_text, encoded_text[1:]):
             counts[pair] = counts.get(pair, 0) + 1
@@ -39,26 +52,38 @@ class RegexTokenizer(BaseTokenizer):
         return merged_tokens
 
     @overrides(check_signature=False)
-    def train(self, text:str, vocab_size:int, verbose=False):
+    def train(self, text: str, vocab_size: int, verbose=False):
         assert vocab_size >= 256
+
+        self.encode_dict = {}
+        self.decode_dict = {}
 
         text_splitted = re.findall(self.regex, text)
 
         tokens_utf8 = [list(text_chunk.encode("utf-8")) for text_chunk in text_splitted]
 
-        merged_tokens = tokens_utf8
+        chunked_tokens = tokens_utf8
 
         num_merges = vocab_size - 256
 
-        replace_token = 257
+        replace_token = 256
 
         self.decode_dict = {token_id: bytes([token_id]) for token_id in range(256)}
 
-        # TODO - trzeba ogarnac ta funkcyje zeby robila statystyke po wszystkich chunkow i potem laczyla w kazdym chunku odpowiednio pary, nastepnie aktualizowala slownik tak jak ma robic. Jeszcze weryfikacja tego calego workflow na gorze
+
         for i in range(num_merges):
-            counter = self.__count_pairs(merged_tokens)
+            counter = {}
+
+            for chunk in chunked_tokens:
+                counter = self.__count_pairs(chunk, counter)
+
+            if not counter:
+                break
+
             most_common_pair = max(counter.keys(), key=counter.get)
-            merged_tokens = self.__merge(merged_tokens, most_common_pair, replace_token)
+
+            chunked_tokens = [self.__merge(chunk, most_common_pair, replace_token)
+                              for chunk in chunked_tokens]
 
             self.encode_dict[most_common_pair] = replace_token
             self.decode_dict[replace_token] = self.decode_dict[most_common_pair[0]] + self.decode_dict[most_common_pair[1]]
@@ -68,12 +93,17 @@ class RegexTokenizer(BaseTokenizer):
 
             replace_token+=1
 
+    def register_special_token(self, special_tokens):
+        # special_tokens is a dictionary of str -> int
+        # example: {"<|endoftext|>": 100257}
+        self.special_tokens_encode = special_tokens
 
-    # TODO - cale to
-    @overrides
-    def encode(self, text):
-        text_tokens = list(text.encode('utf-8'))
+        # int -> str
+        self.special_tokens_decode = {k: v for v, k in special_tokens.items()}
 
+
+
+    def __encode_chunk(self, text_tokens):
         while len(text_tokens) >= 2:
             counter = self.__count_pairs(text_tokens)
 
@@ -90,9 +120,33 @@ class RegexTokenizer(BaseTokenizer):
 
         return text_tokens
 
+    @overrides
+    def encode(self, text):
+        text_splitted = re.findall(self.regex, text)
+        tokens_utf8 = [list(text_chunk.encode("utf-8")) for text_chunk in text_splitted]
+
+        tokenized_string = []
+
+        for chunk in tokens_utf8:
+            tokenized_chunk = self.__encode_chunk(chunk)
+            tokenized_string.extend(tokenized_chunk)
+
+        return tokenized_string
+
+
     # TODO - cale to
     @overrides
     def decode(self, tokens):
-        text_bytes = b"".join(self.decode_dict[token_id] for token_id in tokens)
+
+        text_bytes = b""
+
+        for token in tokens:
+            if token in self.decode_dict:
+                text_bytes += self.decode_dict[token]
+            elif token in self.special_tokens_decode:
+                text_bytes += self.special_tokens_decode[token]
+            else:
+                raise ValueError("Bad token inside of the sentence")
+
         text_out = text_bytes.decode('utf-8', errors='replace')
         return text_out

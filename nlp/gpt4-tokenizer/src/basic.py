@@ -42,7 +42,7 @@ class BasicTokenizer(BaseTokenizer):
 
         num_merges = vocab_size - 256
 
-        replace_token = 257
+        replace_token = 256
 
         self.decode_dict = {token_id: bytes([token_id]) for token_id in range(256)}
 
